@@ -4,4 +4,4 @@ venv/
 __pycache__/
 .env
 db.sqlite3
-*project_run/settings/production.py
+project_run/settings/production.py
