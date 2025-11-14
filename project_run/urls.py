@@ -20,12 +20,9 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-from project_run.apps.app_run.urls import urlpatterns as app_patterns
-
-
-all_patterns = app_patterns + []
+from project_run.apps.app_run.views import company_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(all_patterns)),
+    path('api/company_details/', company_view),
 ]

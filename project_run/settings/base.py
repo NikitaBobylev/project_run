@@ -19,7 +19,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'project_run.apps.app_run.apps.AppRunConfig',
+    'project_run.apps.app_run',
 ]
 
 MIDDLEWARE = [

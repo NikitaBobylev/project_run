@@ -12,5 +12,5 @@ def company_view(request: HttpRequest):
     return Response({ 
         'company_name': settings.COMPANY_NAME,
         'slogan': settings.COMPANY_DESCR,
-        'contacts':  settings.COMPANY_CONTACT
+        'contacts':  settings.COMPANY_CONTACT,
     })
