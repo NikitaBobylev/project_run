@@ -8,5 +8,5 @@ router = DefaultRouter()
 
 
 urlpatterns = [
-    path("runs/", RunsViewSet.as_view({'get': 'list'})),
+    path("runs/", RunsViewSet.as_view({'get': 'list', "post": "create"})),
 ]
