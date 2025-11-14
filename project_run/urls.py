@@ -20,9 +20,13 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-from project_run.apps.app_run.views import company_view
+from project_run.apps.app_run.urls import urlpatterns as app_run_pattenrs
+
+
+result_patterns = [] + app_run_pattenrs
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/company_details/', company_view),
+    path('api/', include(result_patterns)),
 ]
