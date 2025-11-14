@@ -1,9 +1,9 @@
 dev: 
-	python manage.py runserver --settings=project_run.settings.local
+	python manage.py runserver --settings=core.settings.local
 
 
 prod: 
-	python manage.py runserver --settings=project_run.settings.production
+	python manage.py runserver --settings=core.settings.production
 
 migrate: 
 	python manage.py migrate
