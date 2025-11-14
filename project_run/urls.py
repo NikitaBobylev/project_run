@@ -20,7 +20,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-from core.apps.app_run.urls import urlpatterns as app_patterns
+from project_run.apps.app_run.urls import urlpatterns as app_patterns
 
 
 all_patterns = app_patterns + []

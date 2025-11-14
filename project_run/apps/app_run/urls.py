@@ -2,7 +2,7 @@ from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 
-from core.apps.app_run.views import company_view
+from project_run.apps.app_run.views import company_view
 
 router = DefaultRouter()
 
