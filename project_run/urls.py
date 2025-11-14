@@ -20,15 +20,18 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-from project_run.apps.company.urls import urlpatterns as app_run_pattenrs
-from project_run.apps.runs.urls import urlpatterns as runs_pattrns
+# from project_run.apps.company.urls import urlpatterns as app_run_pattenrs
+# from project_run.apps.runs.urls import urlpatterns as runs_pattrns
 
+from project_run.apps.company.views import company_view
+from project_run.apps.runs.views import RunsViewSet
 
-result_patterns = []
-result_patterns.extend(app_run_pattenrs)
-result_patterns.extend(runs_pattrns)
+# result_patterns = []
+# result_patterns.extend(app_run_pattenrs)
+# result_patterns.extend(runs_pattrns)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(result_patterns)),
+    path("api/company_details/", company_view),
+    path("api/runs/", RunsViewSet.as_view({'get': 'list'})),
 ]
