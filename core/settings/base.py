@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
 
     'core.apps.app_run.apps.AppRunConfig',
 ]
@@ -86,3 +87,8 @@ STATIC_URL = 'static/'
 STATIC_ROOT = 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+COMPANY_NAME = 'RUNNNIG'
+COMPANY_DESCR = 'This is company running description'
+COMPANY_CONTACT = 'Город Задунайск, улица 30 Лет СССР, дом 30'
