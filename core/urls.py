@@ -20,11 +20,13 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-from core.apps.app_run.urls import urlpatterns as app_run_pattenrs
+from core.apps.company.urls import urlpatterns as app_run_pattenrs
+from core.apps.runs.urls import urlpatterns as runs_pattrns
 
 
-result_patterns = [] + app_run_pattenrs
-
+result_patterns = []
+result_patterns.extend(app_run_pattenrs)
+result_patterns.extend(runs_pattrns)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

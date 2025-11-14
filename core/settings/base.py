@@ -17,7 +17,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'core.apps.app_run',
+    'core.apps.common.apps.CommonConfig',
+    'core.apps.company.apps.AppRunConfig',
+    'core.apps.runs.apps.RunsConfig',
 ]
 
 MIDDLEWARE = [
