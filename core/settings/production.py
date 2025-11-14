@@ -3,7 +3,6 @@ import os
 from .base import *
 
 # Не редактируйте этот production файл, что не сломать наш продакшн сайт!
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -21,6 +20,8 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 AWS_DEFAULT_ACL = None
+
+DEBUG = False
 
 # Static files (CSS, JavaScript, Images)
 STATIC_LOCATION = 'static'
