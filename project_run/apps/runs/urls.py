@@ -8,5 +8,16 @@ router = DefaultRouter()
 
 
 urlpatterns = [
-    path("runs/", RunsViewSet.as_view({'get': 'list', "post": "create"})),
+    path("runs/", RunsViewSet.as_view({"get": "list", "post": "create"})),
+    path(
+        "runs/<int:pk>/",
+        RunsViewSet.as_view(
+            {
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+    ),
 ]
