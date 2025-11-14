@@ -3,21 +3,14 @@ import os
 from .base import *
 
 # Не редактируйте этот production файл, что не сломать наш продакшн сайт!
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DB_NAME', 'db_name'),
-#         'USER': os.environ.get('DB_USER', 'db_user'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD', 'db_pass'),
-#         'HOST': os.environ.get('DB_HOST', 'https://db_host_example.com'),
-#         'PORT': '5432',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'db_name'),
+        'USER': os.environ.get('DB_USER', 'db_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'db_pass'),
+        'HOST': os.environ.get('DB_HOST', 'https://db_host_example.com'),
+        'PORT': '5432',
     }
 }
 
