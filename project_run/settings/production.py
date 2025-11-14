@@ -4,16 +4,16 @@ from .base import *
 
 # Не редактируйте этот production файл, что не сломать наш продакшн сайт!
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DB_NAME', 'db_name'),
-#         'USER': os.environ.get('DB_USER', 'db_user'),
-#         'PASSWORD': os.environ.get('DB_PASSWORD', 'db_pass'),
-#         'HOST': os.environ.get('DB_HOST', 'https://db_host_example.com'),
-#         'PORT': '5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'db_name'),
+        'USER': os.environ.get('DB_USER', 'db_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'db_pass'),
+        'HOST': os.environ.get('DB_HOST', 'https://db_host_example.com'),
+        'PORT': '5432',
+    }
+}
 
 AWS_STORAGE_BUCKET_NAME = 'zappa-ymqd03cou'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
