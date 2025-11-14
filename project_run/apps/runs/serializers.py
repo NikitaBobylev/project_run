@@ -4,6 +4,6 @@ from project_run.apps.runs.models import Runs
 
 
 class RunsSerializer(ModelSerializer):
-    class Meta: 
+    class Meta:
         model = Runs
-        fields = '__all__'
+        fields = "__all__"
