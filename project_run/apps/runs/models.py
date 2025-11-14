@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from core.apps.common.models import CreatedAtTimeStampedModel
+from project_run.apps.common.models import CreatedAtTimeStampedModel
 # Create your models here.
 
 class Runs(CreatedAtTimeStampedModel): 

@@ -20,8 +20,8 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
-from core.apps.company.urls import urlpatterns as app_run_pattenrs
-from core.apps.runs.urls import urlpatterns as runs_pattrns
+from project_run.apps.company.urls import urlpatterns as app_run_pattenrs
+from project_run.apps.runs.urls import urlpatterns as runs_pattrns
 
 
 result_patterns = []

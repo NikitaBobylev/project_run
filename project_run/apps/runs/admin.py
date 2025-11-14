@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from core.apps.runs.models import Runs
+from project_run.apps.runs.models import Runs
 # Register your models here.
 
 @admin.register(Runs)

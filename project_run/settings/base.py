@@ -17,9 +17,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'core.apps.common.apps.CommonConfig',
-    'core.apps.company.apps.AppRunConfig',
-    'core.apps.runs.apps.RunsConfig',
+    'project_run.apps.common.apps.CommonConfig',
+    'project_run.apps.company.apps.AppRunConfig',
+    'project_run.apps.runs.apps.RunsConfig',
 ]
 
 MIDDLEWARE = [
@@ -31,7 +31,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = 'project_run.urls'
 
 TEMPLATES = [
     {
@@ -50,7 +50,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION = 'project_run.wsgi.application'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

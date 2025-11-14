@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from core.apps.runs.models import Runs
+from project_run.apps.runs.models import Runs
 
 
 class RunsSerializer(ModelSerializer):

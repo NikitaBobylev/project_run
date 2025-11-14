@@ -2,11 +2,11 @@ from django.urls import path
 
 from rest_framework.routers import DefaultRouter
 
-from core.apps.company.views import company_view
+from project_run.apps.runs.views import RunsViewSet
 
 router = DefaultRouter()
 
-urlpatterns = [
-    path("company_details/", company_view),
-]
 
+urlpatterns = [
+    path("runs/", RunsViewSet.as_view({'get': 'list'})),
+]
