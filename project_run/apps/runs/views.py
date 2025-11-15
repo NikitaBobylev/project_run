@@ -1,6 +1,5 @@
-from django.http import HttpRequest, Http404
+from django.http import HttpRequest
 from django.db import models
-from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
