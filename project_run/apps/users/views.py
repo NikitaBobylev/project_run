@@ -1,5 +1,4 @@
 from rest_framework.filters import OrderingFilter
-from rest_framework.pagination import PageNumberPagination
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import QuerySet, Q, Value, CharField, Case, When
@@ -8,11 +7,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter
 
 from project_run.apps.users.serializers import GetUserSerializer
-
-class UserAppPagination(PageNumberPagination):
-    page_size_query_param = (
-        "size"
-    )
+from project_run.apps.common.filters import CommonAppPagination
 
 class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
     _user_types = {"coach": True, "athlete": False}
@@ -23,7 +18,7 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
     search_fields = ["first_name", "last_name"]
     ordering_fields = ["date_joined"]
     serializer_class = GetUserSerializer
-    pagination_class = UserAppPagination
+    pagination_class = CommonAppPagination
 
     def get_user_param_type(self) -> str | None:
         param_user_type = self.request.query_params.get("type", None)
