@@ -37,7 +37,7 @@ class AtheleteApiView(APIView):
         serializer = self.serializer_class(
             data=request.data
         )
-        serializer.is_valid()
+        serializer.is_valid(raise_exception=True)
         if not serializer.validated_data: 
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
