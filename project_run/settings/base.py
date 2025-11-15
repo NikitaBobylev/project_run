@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django_filters",
 
 
+    "project_run.apps.athletes.apps.AthletesConfig",
     "project_run.apps.common.apps.CommonConfig",
     "project_run.apps.company.apps.AppRunConfig",
     "project_run.apps.runs.apps.RunsConfig",

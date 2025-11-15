@@ -9,10 +9,7 @@ from django.db.models import (
     Case,
     When,
     Count,
-    F,
     Prefetch,
-    OuterRef,
-    Subquery,
 )
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -42,6 +39,7 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
 
         return param_user_type
 
+    
     def _build_query(self) -> Q:
         qs = Q(
             is_superuser=False,
