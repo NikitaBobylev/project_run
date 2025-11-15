@@ -23,7 +23,7 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
 
         return param_user_type
 
-    def _build_query(self, params: dict) -> Q:
+    def _build_query(self) -> Q:
         qs = Q(
             is_superuser=False,
         )
@@ -33,13 +33,22 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
         return qs
 
     def get_queryset(self) -> QuerySet:
-
         queryset = self.queryset.filter(
-            self._build_query(self.request.query_params)
+            self._build_query()
         ).annotate(
             type=Case(
-                When(is_staff=True, then=Value(self._user_types_reversd[True])),
-                When(is_staff=False, then=Value(self._user_types_reversd[False])),
+                When(
+                    is_staff=True,
+                    then=Value(
+                        self._user_types_reversd[True], output_field=CharField()
+                    ),
+                ),
+                When(
+                    is_staff=False,
+                    then=Value(
+                        self._user_types_reversd[False], output_field=CharField()
+                    ),
+                ),
             )
         )
 
