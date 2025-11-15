@@ -1,7 +1,19 @@
 from rest_framework.filters import OrderingFilter
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import QuerySet, Q, Value, CharField, Case, When, Count, F, Prefetch
+from django.db.models import (
+    QuerySet,
+    Q,
+    Value,
+    CharField,
+    Case,
+    When,
+    Count,
+    F,
+    Prefetch,
+    OuterRef,
+    Subquery,
+)
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter
@@ -9,6 +21,7 @@ from rest_framework.filters import SearchFilter
 from project_run.apps.runs.models import Runs, RunsStatusEnums
 from project_run.apps.users.serializers import GetUserSerializer
 from project_run.apps.common.filters import CommonAppPagination
+
 
 class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
     _user_types = {"coach": True, "athlete": False}
@@ -39,14 +52,17 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
         return qs
 
     def get_queryset(self) -> QuerySet:
-        queryset = self.queryset.prefetch_related(
-            Prefetch("runs", 
-                Runs.objects.all().filter(
-                Q(status=RunsStatusEnums.finished.value) & 
-                Q(athlete__id=F("id"))
-            ))
-        ).filter(self._build_query()
-            ).annotate(
+        queryset = (
+            self.queryset.filter(self._build_query())
+            .prefetch_related(
+                Prefetch(
+                    "runs",
+                    queryset=Runs.objects.filter(
+                        Q(status=RunsStatusEnums.finished.value)
+                    ),
+                )
+            )
+            .annotate(
                 type=Case(
                     When(
                         is_staff=True,
@@ -61,8 +77,12 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
                         ),
                     ),
                 )
-            ).annotate(
-                runs_finished=Count(F("runs"))
             )
+            .annotate(
+                runs_finished=Count(
+                    "runs", filter=Q(runs__status=RunsStatusEnums.finished.value)
+                )
+            )
+        )
 
         return queryset
