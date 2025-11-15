@@ -40,8 +40,10 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self) -> QuerySet:
         queryset = self.queryset.prefetch_related(
-            Prefetch("runs", Runs.objects.all().filter(
-                status=RunsStatusEnums.finished.value
+            Prefetch("runs", 
+                Runs.objects.all().filter(
+                Q(status=RunsStatusEnums.finished.value) & 
+                Q(athlete__id=F("id"))
             ))
         ).filter(self._build_query()
             ).annotate(
