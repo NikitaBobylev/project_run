@@ -1,11 +1,12 @@
 from rest_framework.filters import OrderingFilter
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import QuerySet, Q, Value, CharField, Case, When
+from django.db.models import QuerySet, Q, Value, CharField, Case, When, Count, F, Prefetch
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter
 
+from project_run.apps.runs.models import Runs, RunsStatusEnums
 from project_run.apps.users.serializers import GetUserSerializer
 from project_run.apps.common.filters import CommonAppPagination
 
@@ -38,21 +39,28 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
         return qs
 
     def get_queryset(self) -> QuerySet:
-        queryset = self.queryset.filter(self._build_query()).annotate(
-            type=Case(
-                When(
-                    is_staff=True,
-                    then=Value(
-                        self._user_types_reversd[True], output_field=CharField()
+        queryset = self.queryset.prefetch_related(
+            Prefetch("runs", Runs.objects.all().filter(
+                status=RunsStatusEnums.finished.value
+            ))
+        ).filter(self._build_query()
+            ).annotate(
+                type=Case(
+                    When(
+                        is_staff=True,
+                        then=Value(
+                            self._user_types_reversd[True], output_field=CharField()
+                        ),
                     ),
-                ),
-                When(
-                    is_staff=False,
-                    then=Value(
-                        self._user_types_reversd[False], output_field=CharField()
+                    When(
+                        is_staff=False,
+                        then=Value(
+                            self._user_types_reversd[False], output_field=CharField()
+                        ),
                     ),
-                ),
+                )
+            ).annotate(
+                runs_finished=Count(F("runs"))
             )
-        )
 
         return queryset
