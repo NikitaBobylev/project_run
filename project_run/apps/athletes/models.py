@@ -16,4 +16,4 @@ def validate_weight(value: int):
 class AthleteInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     weight = models.IntegerField(null=False, validators=[validate_weight], default=1)
-    goals = models.IntegerField(null=False, default=0)
+    goals = models.FloatField(null=False, default=0)
