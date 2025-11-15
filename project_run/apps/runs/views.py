@@ -1,3 +1,5 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
 from django.http import HttpRequest
 from django.db import models
 from rest_framework.views import APIView
@@ -7,16 +9,24 @@ from rest_framework import status
 
 from project_run.apps.runs.models import Runs as RunsModel, RunsStatusEnums
 from project_run.apps.runs.serializers import RunsSerializer
+from project_run.apps.common.filters import CommonAppPagination
 
+
+def get_base_quesry_set(queryset: models.QuerySet):
+    return queryset.select_related("athlete")
 
 class RunsViewSet(ModelViewSet):
     model: models.Model = RunsModel
     queryset = model.objects.all()
     serializer_class = RunsSerializer
     valid_statuses = {}
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_fields = ["status", "athlete"]
+    ordering_fields = ["created_at"]
+    pagination_class = CommonAppPagination
 
     def get_queryset(self):
-        return self.queryset.select_related("athlete").annotate()
+        return get_base_quesry_set(self.queryset)
 
 
 class BaseRunsApiView(APIView):
@@ -30,8 +40,8 @@ class BaseRunsApiView(APIView):
         return RunsStatusEnums._init
 
     def get_queryset(self):
-        return self.queryset.select_related("athlete").annotate()
-    
+        return get_base_quesry_set(self.queryset)
+
     def post(self, request: HttpRequest, *args, **kwargs) -> Response:
         pk = kwargs.get("pk", None)
         if pk is None:
