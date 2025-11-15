@@ -38,7 +38,7 @@ class BaseRunsApiView(APIView):
             curr_status = status.HTTP_404_NOT_FOUND
             return Response(data={}, status=curr_status)
         try:
-            obj = self.model.objects.select_for_update().get(pk=pk)
+            obj = self.model.objects.get(pk=pk)
         except self.model.DoesNotExist:
             curr_status = status.HTTP_404_NOT_FOUND
             return Response(data={}, status=curr_status)
