@@ -38,8 +38,8 @@ class AtheleteApiView(APIView):
             data=request.data
         )
         serializer.is_valid(raise_exception=True)
-        if not serializer.validated_data: 
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        # if not serializer.validated_data: 
+        #     return Response(status=status.HTTP_400_BAD_REQUEST)
         
         self.model.objects.update_or_create(
             user_id=user_id,
