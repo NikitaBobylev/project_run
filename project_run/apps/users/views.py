@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import QuerySet, Q, Value, CharField, Case, When
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.filters import SearchFilter
 
 from project_run.apps.users.serializers import GetUserSerializer
 
@@ -12,6 +13,10 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
     _user_types_reversd = {val: key for key, val in _user_types.items()}
     model: models.Model = User
     queryset = model.objects.all()
+    filter_backends = [
+        SearchFilter,
+    ]
+    search_fields = ["first_name", "last_name"]
 
     serializer_class = GetUserSerializer
 
