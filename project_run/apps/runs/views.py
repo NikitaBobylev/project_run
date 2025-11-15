@@ -36,21 +36,21 @@ class BaseRunsApiView(APIView):
         pk = kwargs.get("pk", None)
         if pk is None:
             curr_status = status.HTTP_404_NOT_FOUND
-            return Response(data={"status": curr_status}, status=curr_status)
+            return Response(data={}, status=curr_status)
         try:
             obj = self.model.objects.select_for_update().get(pk=pk)
         except self.model.DoesNotExist:
             curr_status = status.HTTP_404_NOT_FOUND
-            return Response(data={"status": curr_status}, status=curr_status)
+            return Response(data={}, status=curr_status)
 
         if obj.status not in self.valid_statuses:
             curr_status = status.HTTP_400_BAD_REQUEST
-            return Response(data={"status": curr_status}, status=curr_status)
+            return Response(data={}, status=curr_status)
 
         obj.status = self.action
         obj.save()
         curr_status = status.HTTP_200_OK
-        return Response(data={"status": curr_status}, status=curr_status)
+        return Response(data={}, status=curr_status)
 
 
 class StartRunApiView(BaseRunsApiView):
