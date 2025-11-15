@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import QuerySet, Q, Value, CharField, F, Case, When
+from django.db.models import QuerySet, Q, Value, CharField, Case, When
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
@@ -33,9 +33,7 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
         return qs
 
     def get_queryset(self) -> QuerySet:
-        queryset = self.queryset.filter(
-            self._build_query()
-        ).annotate(
+        queryset = self.queryset.filter(self._build_query()).annotate(
             type=Case(
                 When(
                     is_staff=True,
