@@ -5,7 +5,7 @@ from project_run.apps.athletes.models import AthleteInfo, validate_weight
 
 class AthleteInfoSerializer(ModelSerializer):
     user_id = IntegerField(read_only=True)
-    goals = IntegerField(default=0)
+    goals = IntegerField(required=False, default=0)
     weight = IntegerField(validators=[validate_weight], default=1)
 
 
