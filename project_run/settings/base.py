@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "project_run.apps.common.apps.CommonConfig",
     "project_run.apps.company.apps.AppRunConfig",
     "project_run.apps.challenges.apps.ChallengesConfig",
+    "project_run.apps.positions.apps.PositionsConfig",
     "project_run.apps.runs.apps.RunsConfig",
 ]
 
