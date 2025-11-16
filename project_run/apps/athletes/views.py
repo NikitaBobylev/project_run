@@ -32,7 +32,6 @@ class AtheleteApiView(APIView):
         get_object_or_404(get_user_model(), pk=user_id)
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
         self.model.objects.update_or_create(
             user_id=user_id, defaults=serializer.validated_data
         )
