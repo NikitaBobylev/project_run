@@ -6,7 +6,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 def validate_weight(value: int):
-    
     if not 0 < value < 900:
         raise ValidationError(
             _("%(value)s is not an valid number"),
@@ -15,5 +14,5 @@ def validate_weight(value: int):
 
 class AthleteInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    weight = models.IntegerField(null=False, validators=[validate_weight], default=1)
-    goals = models.TextField(null=True)
+    weight = models.IntegerField(null=True, validators=[validate_weight], default=1)
+    goals = models.TextField(null=True, default=None)

@@ -15,6 +15,7 @@ from project_run.apps.common.filters import CommonAppPagination
 def get_base_quesry_set(queryset: models.QuerySet):
     return queryset.select_related("athlete")
 
+
 class RunsViewSet(ModelViewSet):
     model: models.Model = RunsModel
     queryset = model.objects.all()

@@ -4,9 +4,9 @@ from .base import *
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -19,14 +19,19 @@ LOGGING = {
             "class": "logging.StreamHandler",
         },
     },
-    "loggers": {
-        "django.db.backends": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-        },
-    },
+    "loggers": {},
 }
 
-                  
+
+SQL_LOGGING = False
+if SQL_LOGGING:
+    LOGGING["loggers"].update(
+        {
+            "django.db.backends": {
+                "handlers": ["console"],
+                "level": "DEBUG",
+            }
+        }
+    )
 
 DEBUG = True
