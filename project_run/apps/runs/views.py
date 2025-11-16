@@ -1,3 +1,6 @@
+from decimal import Decimal
+
+
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from django.http import HttpRequest
@@ -13,7 +16,7 @@ from project_run.apps.common.filters import CommonAppPagination
 
 
 def get_base_quesry_set(queryset: models.QuerySet):
-    return queryset.select_related("athlete")
+    return queryset.select_related("athlete").prefetch_related("positions")
 
 
 class RunsViewSet(ModelViewSet):
@@ -42,6 +45,7 @@ class BaseRunsApiView(APIView):
 
     def get_queryset(self):
         return get_base_quesry_set(self.queryset)
+
 
     def post(self, request: HttpRequest, *args, **kwargs) -> Response:
         pk = kwargs.get("pk", None)

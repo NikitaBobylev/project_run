@@ -22,7 +22,7 @@ class PositionSerilizer(ModelSerializer):
             raise ValidationError("Incorrect longitude")
         return value
 
-
+    
     def validate_run(self, run):
         if run.status != RunsStatusEnums.in_progress.value:
             raise ValidationError("Incorred status for create position need in_progress")
