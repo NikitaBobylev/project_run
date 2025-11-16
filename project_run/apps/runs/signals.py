@@ -1,0 +1,21 @@
+from django.conf import settings
+from django.db.models import Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+from project_run.apps.runs.models import Runs, RunsStatusEnums
+from project_run.apps.challenges.models import Challenges
+
+
+@receiver(post_save, sender=Runs)
+def create_challege(sender, instance, created, **kwargs):
+    if (
+        not created
+        and instance.status == RunsStatusEnums.finished.value
+        and sender.objects.filter(
+            Q(athlete_id=instance.athlete_id) & Q(status=RunsStatusEnums.finished.value)
+        ).count()== settings.CREATE_SIGNAL_CHALLENGE_COUNT
+    ):
+        challenge = Challenges(full_name="Сделай 10 Забегов!", athlete=instance.athlete)
+        challenge.save()

@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "project_run.apps.athletes.apps.AthletesConfig",
     "project_run.apps.common.apps.CommonConfig",
     "project_run.apps.company.apps.AppRunConfig",
+    "project_run.apps.challenges.apps.ChallengesConfig",
     "project_run.apps.runs.apps.RunsConfig",
 ]
 
@@ -88,3 +89,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 COMPANY_NAME = "RUNNNIG"
 COMPANY_DESCR = "This is company running description"
 COMPANY_CONTACT = "Город Задунайск, улица 30 Лет СССР, дом 30"
+
+CREATE_SIGNAL_CHALLENGE_COUNT = 10
