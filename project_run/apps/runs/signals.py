@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, QuerySet, Sum
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
@@ -14,33 +14,45 @@ from project_run.apps.challenges.models import Challenges
 
 @receiver(post_save, sender=Runs)
 def create_challege(sender, instance, created, **kwargs):
-    if (
-        not created
-        and instance.status == RunsStatusEnums.finished.value
-        and sender.objects.filter(
+    if not created and instance.status == RunsStatusEnums.finished.value:
+        athelte_runs_query_set: QuerySet = sender.objects.filter(
             Q(athlete_id=instance.athlete_id) & Q(status=RunsStatusEnums.finished.value)
-        ).count()== settings.CREATE_SIGNAL_CHALLENGE_COUNT
-    ):
-        challenge = Challenges(full_name="Сделай 10 Забегов!", athlete=instance.athlete)
-        challenge.save()
+        )
+        if athelte_runs_query_set.count() == settings.CREATE_SIGNAL_CHALLENGE_COUNT:
 
+            challenge = Challenges(
+                full_name=f"Сделай {settings.CREATE_SIGNAL_CHALLENGE_COUNT} Забегов!",
+                athlete=instance.athlete,
+            )
+            challenge.save()
+
+        all_disntace = athelte_runs_query_set.aggregate(Sum("distance"))[
+            "distance__sum"
+        ]
+        print(all_disntace)
+        if all_disntace >= settings.CREATE_SIGNAL_CHALLENGE_50_COUNT:
+            challenge = Challenges(
+                full_name=f"Пробеги {settings.CREATE_SIGNAL_CHALLENGE_50_COUNT} километров!",
+                athlete=instance.athlete,
+            )
+            challenge.save()
 
 
 def __calculate_distance(instance: Runs) -> Decimal:
-        res = Decimal(0)
-        positions = instance.positions.order_by("created_at").values()
+    res = Decimal(0)
+    positions = instance.positions.order_by("created_at").values()
 
-        for position in range(1, len(positions)):
-            first = positions[position - 1]
-            last = positions[position]
-            res += Decimal(
-                geodesic(
-                    (first["latitude"], first["longitude"]),
-                    (last["latitude"], last["longitude"]),
-                ).kilometers
-            )
+    for position in range(1, len(positions)):
+        first = positions[position - 1]
+        last = positions[position]
+        res += Decimal(
+            geodesic(
+                (first["latitude"], first["longitude"]),
+                (last["latitude"], last["longitude"]),
+            ).kilometers
+        )
 
-        return res
+    return res
 
 
 @receiver(pre_save, sender=Runs)

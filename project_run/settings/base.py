@@ -92,3 +92,4 @@ COMPANY_DESCR = "This is company running description"
 COMPANY_CONTACT = "Город Задунайск, улица 30 Лет СССР, дом 30"
 
 CREATE_SIGNAL_CHALLENGE_COUNT = 10
+CREATE_SIGNAL_CHALLENGE_50_COUNT = 50
