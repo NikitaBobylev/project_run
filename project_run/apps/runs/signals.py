@@ -35,8 +35,8 @@ def __calculate_distance(instance: Runs) -> Decimal:
             last = positions[position]
             res += Decimal(
                 geodesic(
-                    (first["latitude"], last["latitude"]),
-                    (last["latitude"], last["latitude"]),
+                    (first["latitude"], first["longitude"]),
+                    (last["latitude"], last["longitude"]),
                 ).kilometers
             )
 
