@@ -18,23 +18,30 @@ base_user_fields = [
     "first_name",
 ]
 
+get_user_fieds = ["date_joined", "type", "runs_finished" ]
+
 
 class GetRunsUserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = base_user_fields.copy()
 
-
 class GetUserSerializer(ModelSerializer):
     type = SerializerMethodField()
     runs_finished = IntegerField()
-    items = SerializerMethodField(read_only=True)
 
     def get_type(self, obj):
         return obj.type
 
     def get_runs_finished(self, obj):
         return obj.runs_finished
+
+    class Meta:
+        model = User
+        fields = base_user_fields + get_user_fieds
+
+class GetUserItemsSerializer(GetUserSerializer):
+    items = SerializerMethodField(read_only=True)
 
     def get_items(self, obj):
         items = CollectibleItems.objects.prefetch_related("users").filter(
@@ -44,4 +51,4 @@ class GetUserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = base_user_fields + ["date_joined", "type", "runs_finished", "items"]
+        fields = base_user_fields + get_user_fieds + ["items"]
