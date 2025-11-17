@@ -10,6 +10,7 @@ from geopy.distance import geodesic
 
 from project_run.apps.runs.models import Runs, RunsStatusEnums
 from project_run.apps.challenges.models import Challenges
+from project_run.apps.positions.models import Positions
 
 
 @receiver(post_save, sender=Runs)
@@ -60,9 +61,9 @@ def __calculate_run_time_seconds(positions):
     return res
 
 @receiver(pre_save, sender=Runs)
-def calculate_distance(**kwargs):
-    positions = kwargs["instance"].positions.order_by("created_at").values()
-    if kwargs["instance"].status == RunsStatusEnums.finished.value:
-        kwargs["instance"].distance = __calculate_distance(kwargs["instance"], positions)
+def calculate_distance(sender, instance, *args, **kwargs):
+    positions = Positions.objects.filter(run_id=instance.id).order_by("created_at").values()
+    if instance.status == RunsStatusEnums.finished.value:
+        instance.distance = __calculate_distance(instance, positions)
 
-    kwargs["instance"].run_time_seconds = __calculate_run_time_seconds(positions=positions)
+        instance.run_time_seconds = __calculate_run_time_seconds(positions=positions)

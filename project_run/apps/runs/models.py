@@ -26,6 +26,3 @@ class Runs(CreatedAtTimeStampedModel):
     run_time_seconds = models.IntegerField(
         default=None, blank=True, null=True,
     )
-
-    def save(self, commit=False, *args, **kwargs):
-        return super().save(*args, **kwargs)

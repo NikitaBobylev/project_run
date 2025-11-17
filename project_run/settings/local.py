@@ -23,7 +23,7 @@ LOGGING = {
 }
 
 
-SQL_LOGGING = True
+SQL_LOGGING = False
 if SQL_LOGGING:
     LOGGING["loggers"].update(
         {
