@@ -25,6 +25,7 @@ from project_run.apps.runs.urls import urlpatterns as runs_pattrns
 from project_run.apps.users.urls import urlpatterns as users_patterns
 from project_run.apps.athletes.urls import urlpatterns as athlets_patterns
 from project_run.apps.challenges.urls import urlpatterns as challenges_pattherns
+from project_run.apps.collectibleitems.urls import urlpatterns as items_patterns
 from project_run.apps.positions.urls import urlpatterns as positions_patterns
 
 # from project_run.apps.company.views import company_view
@@ -38,6 +39,7 @@ result_patterns.extend(users_patterns)
 result_patterns.extend(athlets_patterns)
 result_patterns.extend(challenges_pattherns)
 result_patterns.extend(positions_patterns)
+result_patterns.extend(items_patterns)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

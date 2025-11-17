@@ -29,7 +29,6 @@ def create_challege(sender, instance, created, **kwargs):
         all_disntace = athelte_runs_query_set.aggregate(Sum("distance"))[
             "distance__sum"
         ]
-        print(all_disntace)
         if all_disntace >= settings.CREATE_SIGNAL_CHALLENGE_50_COUNT:
             challenge = Challenges(
                 full_name=f"Пробеги {settings.CREATE_SIGNAL_CHALLENGE_50_COUNT} километров!",
