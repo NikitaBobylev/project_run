@@ -1,9 +1,6 @@
-from django.shortcuts import render
-
 from django.http.request import HttpRequest
-from rest_framework import views, status
+from rest_framework import views
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin
 
@@ -12,16 +9,16 @@ import openpyxl
 
 from project_run.apps.collectibleitems.models import CollectibleItems
 from project_run.apps.collectibleitems.serializers import (
-    CollectibleItemsSerializer,
+    CollectibleItemsSerializerInput,
+    CollectibleItemsSerializerOutput,
     UploadCollectibleFileSerializer,
 )
 
 
 class FileUploadView(views.APIView):
-    # parser_classes = (FormParser, MultiPartParser, FileUploadParser)
     model = CollectibleItems
     serializer_class = UploadCollectibleFileSerializer
-    items_serializer = CollectibleItemsSerializer
+    items_serializer = CollectibleItemsSerializerInput
 
     def post(self, request: HttpRequest, format=None):
 
@@ -63,5 +60,5 @@ class FileUploadView(views.APIView):
 
 class CollectibleItemeViewSet(ListModelMixin, GenericViewSet):
     model = CollectibleItems
-    serializer_class = CollectibleItemsSerializer
+    serializer_class = CollectibleItemsSerializerOutput
     queryset = model.objects.all()

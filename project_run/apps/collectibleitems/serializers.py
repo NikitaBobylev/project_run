@@ -12,12 +12,14 @@ from project_run.apps.positions.models import (
 
 from project_run.apps.collectibleitems.models import CollectibleItems
 
+base_fields = ["uid", "name", "value", "latitude", "longitude"]
+
 
 class UploadCollectibleFileSerializer(Serializer):
     file = FileField()
 
 
-class CollectibleItemsSerializer(ModelSerializer):
+class CollectibleItemsSerializerInput(ModelSerializer):
     uid = CharField()
     url = URLField(source="picture")
 
@@ -31,4 +33,11 @@ class CollectibleItemsSerializer(ModelSerializer):
 
     class Meta:
         model = CollectibleItems
-        fields = ["uid", "url", "name", "value", "latitude", "longitude"]
+        fields = base_fields + ["url"]
+
+
+class CollectibleItemsSerializerOutput(ModelSerializer):
+
+    class Meta:
+        model = CollectibleItems
+        fields = base_fields + ["picture"]
