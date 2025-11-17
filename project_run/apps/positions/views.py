@@ -1,22 +1,20 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
-from django.shortcuts import get_object_or_404
-
 
 from rest_framework import mixins, viewsets
 
 from project_run.apps.positions.models import Positions
 from project_run.apps.positions.serializers import PositionSerilizer
 
-# Create your views here.
+
 class PositionsViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.DestroyModelMixin,
-    viewsets.GenericViewSet
+    viewsets.GenericViewSet,
 ):
     model: models.Model = Positions
-    queryset = model.objects.all()
+    queryset = model.objects.select_related("run").all()
     serializer_class = PositionSerilizer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["run"]
