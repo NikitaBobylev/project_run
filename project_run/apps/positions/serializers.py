@@ -1,7 +1,6 @@
 from rest_framework.serializers import ModelSerializer, DecimalField, DateTimeField
 from rest_framework.exceptions import ValidationError
 
-
 from project_run.apps.positions.models import (
     Positions,
     validate_latitude as validate_latitude_db,
@@ -13,8 +12,10 @@ from project_run.apps.runs.models import RunsStatusEnums
 class PositionSerilizer(ModelSerializer):
     latitude = DecimalField(max_digits=7, decimal_places=4, required=True)
     longitude = DecimalField(max_digits=7, decimal_places=4, required=True)
-    date_time = DateTimeField(format="%Y-%m-%dT%H:%M:%S.%f", source="created_at")
-    
+    date_time = DateTimeField(
+        format="%Y-%m-%dT%H:%M:%S.%f",
+        source="created_at",
+    )
 
     def validate_latitude(self, value):
         validate_latitude_db(value=value)
@@ -30,7 +31,17 @@ class PositionSerilizer(ModelSerializer):
                 "Incorred status for create position need in_progress"
             )
         return run
-    
+
+    def to_internal_value(self, data):
+        # Преобразуем данные перед валидацией
+        internal_value = super().to_internal_value(data)
+        
+        # Перемещаем date_time в created_at
+        if 'date_time' in internal_value:
+            internal_value['created_at'] = internal_value.pop('date_time')
+            
+        return internal_value
+
     class Meta:
         model = Positions
         fields = ["longitude", "run", "latitude", "id", "date_time"]

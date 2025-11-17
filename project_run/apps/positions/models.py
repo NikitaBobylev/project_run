@@ -1,6 +1,5 @@
 from django.db import models
 
-from project_run.apps.common.models import CreatedAtTimeStampedModel
 from project_run.apps.runs.models import Runs
 
 from django.core.exceptions import ValidationError
@@ -18,7 +17,7 @@ def validate_longitude(value):
     return value
 
 
-class PositionsAbstract(CreatedAtTimeStampedModel):
+class PositionsAbstract(models.Model):
     latitude = models.DecimalField(
         max_digits=7,
         decimal_places=4,
@@ -40,3 +39,4 @@ class PositionsAbstract(CreatedAtTimeStampedModel):
 
 class Positions(PositionsAbstract):
     run = models.ForeignKey(Runs, on_delete=models.CASCADE, related_name="positions")
+    created_at = models.DateTimeField()
