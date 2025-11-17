@@ -16,7 +16,6 @@ base_user_fields = [
     "username",
     "last_name",
     "first_name",
-    "items",
 ]
 
 
@@ -45,4 +44,4 @@ class GetUserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = base_user_fields + ["date_joined", "type", "runs_finished"]
+        fields = base_user_fields + ["date_joined", "type", "runs_finished", "items"]
