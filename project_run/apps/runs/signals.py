@@ -37,10 +37,8 @@ def create_challege(sender, instance, created, **kwargs):
             challenge.save()
 
 
-def __calculate_distance(instance: Runs) -> Decimal:
+def __calculate_distance(instance: Runs, positions) -> Decimal:
     res = Decimal(0)
-    positions = instance.positions.order_by("created_at").values()
-
     for position in range(1, len(positions)):
         first = positions[position - 1]
         last = positions[position]
@@ -54,7 +52,17 @@ def __calculate_distance(instance: Runs) -> Decimal:
     return res
 
 
+def __calculate_run_time_seconds(positions):
+    res = 0
+    if len(positions) > 0: 
+        res = (positions.last()["created_at"] - positions.first()["created_at"]).seconds
+
+    return res
+
 @receiver(pre_save, sender=Runs)
 def calculate_distance(**kwargs):
+    positions = kwargs["instance"].positions.order_by("created_at").values()
     if kwargs["instance"].status == RunsStatusEnums.finished.value:
-        kwargs["instance"].distance = __calculate_distance(kwargs["instance"])
+        kwargs["instance"].distance = __calculate_distance(kwargs["instance"], positions)
+
+    kwargs["instance"].run_time_seconds = __calculate_run_time_seconds(positions=positions)

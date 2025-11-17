@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, DecimalField
+from rest_framework.serializers import ModelSerializer, DecimalField, DateTimeField
 from rest_framework.exceptions import ValidationError
 
 
@@ -13,6 +13,8 @@ from project_run.apps.runs.models import RunsStatusEnums
 class PositionSerilizer(ModelSerializer):
     latitude = DecimalField(max_digits=7, decimal_places=4, required=True)
     longitude = DecimalField(max_digits=7, decimal_places=4, required=True)
+    date_time = DateTimeField(format="%Y-%m-%dT%H:%M:%S.%f", source="created_at")
+    
 
     def validate_latitude(self, value):
         validate_latitude_db(value=value)
@@ -31,4 +33,4 @@ class PositionSerilizer(ModelSerializer):
 
     class Meta:
         model = Positions
-        fields = ["longitude", "run", "latitude", "id"]
+        fields = ["longitude", "run", "latitude", "id", "date_time"]
