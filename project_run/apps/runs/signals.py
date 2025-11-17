@@ -62,8 +62,9 @@ def __calculate_run_time_seconds(positions):
 
 @receiver(pre_save, sender=Runs)
 def calculate_distance(sender, instance, *args, **kwargs):
-    positions = Positions.objects.filter(run_id=instance.id).order_by("created_at").values()
     if instance.status == RunsStatusEnums.finished.value:
+        positions = instance.positions.order_by("created_at").values()
+
         instance.distance = __calculate_distance(instance, positions)
 
         instance.run_time_seconds = __calculate_run_time_seconds(positions=positions)

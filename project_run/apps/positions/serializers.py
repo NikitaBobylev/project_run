@@ -30,7 +30,7 @@ class PositionSerilizer(ModelSerializer):
                 "Incorred status for create position need in_progress"
             )
         return run
-
+    
     class Meta:
         model = Positions
         fields = ["longitude", "run", "latitude", "id", "date_time"]

@@ -5,4 +5,5 @@ from project_run.apps.positions.models import Positions
 
 @admin.register(Positions)
 class CategoryAdmin(admin.ModelAdmin): 
-    ...
+    class Meta:
+        fieds = "__all__"
