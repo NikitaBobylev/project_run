@@ -43,24 +43,28 @@ def check_collectible_items(
 
 @receiver(pre_save, sender=Positions)
 def calculate_position(sender: type[Positions], instance: Positions, **kwargs):
-    prev_position = (
-        sender.objects.filter(Q(run_id=instance.run_id) & ~Q(id=instance.id))
-        .order_by("created_at")
-        .last()
-    )
+    all_positions = sender.objects.filter(
+        Q(run_id=instance.run_id) & ~Q(id=instance.id)
+    ).order_by("created_at")
+
+    prev_position = all_positions.last()
+    first_position = all_positions.first()
 
     if prev_position:
-        disntace_geo = geodesic(
+        disntace_geo_first = geodesic(
+            (first_position.latitude, first_position.longitude),
+            (instance.latitude, instance.longitude),
+        )
+
+        disntace_geo_last = geodesic(
             (prev_position.latitude, prev_position.longitude),
             (instance.latitude, instance.longitude),
         )
         instance.distance = float(
             round(
-                disntace_geo.kilometers,
+                disntace_geo_first.kilometers,
                 2,
             )
         )
-        print(instance.created_at, prev_position.created_at, disntace_geo.meters)
         time_spend_seconds = (instance.created_at - prev_position.created_at).seconds
-        print(time_spend_seconds)
-        instance.speed = float(round(disntace_geo.meters / time_spend_seconds, 2))
+        instance.speed = float(round(disntace_geo_last.meters / time_spend_seconds, 2))
