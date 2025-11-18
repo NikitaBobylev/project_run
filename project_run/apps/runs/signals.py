@@ -5,8 +5,6 @@ from django.db.models import Q, QuerySet, Sum, Avg
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from geopy.distance import geodesic
-
 
 from project_run.apps.runs.models import Runs, RunsStatusEnums
 from project_run.apps.challenges.models import Challenges
@@ -36,7 +34,6 @@ def create_challege(sender, instance, created, **kwargs):
             )
             challenge.save()
 
-
         if instance.distance >= 2 and instance.run_time_seconds / 60 <= 10:
             challenge = Challenges(
                 full_name=f"2 километра за 10 минут!",
@@ -45,19 +42,7 @@ def create_challege(sender, instance, created, **kwargs):
             challenge.save()
 
 
-
 def __calculate_distance(instance: Runs, positions) -> Decimal:
-    # res = Decimal(0)
-    # for position in range(1, len(positions)):
-    #     first = positions[position - 1]
-    #     last = positions[position]
-    #     res += Decimal(
-    #         geodesic(
-    #             (first["latitude"], first["longitude"]),
-    #             (last["latitude"], last["longitude"]),
-    #         ).kilometers
-    #     )
-
     return Decimal(positions.last()["distance"])
 
 
@@ -77,4 +62,6 @@ def calculate_distance(sender, instance, *args, **kwargs):
         instance.distance = __calculate_distance(instance, positions)
 
         instance.run_time_seconds = __calculate_run_time_seconds(positions=positions)
-        instance.speed = float(round(positions.aggregate(Avg("speed"))['speed__avg'], 2))
+        instance.speed = float(
+            round(positions.aggregate(Avg("speed"))["speed__avg"], 2)
+        )

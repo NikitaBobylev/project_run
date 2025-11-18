@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     "project_run.apps.collectibleitems.apps.CollectibleitemsConfig",
     "project_run.apps.challenges.apps.ChallengesConfig",
     "project_run.apps.positions.apps.PositionsConfig",
+    "project_run.apps.subscriptions.apps.SubscriptionsConfig",
     "project_run.apps.runs.apps.RunsConfig",
 ]
 

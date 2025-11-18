@@ -16,7 +16,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.filters import SearchFilter
 
 from project_run.apps.runs.models import Runs, RunsStatusEnums
-from project_run.apps.users.serializers import GetUserSerializer, GetUserItemsSerializer
+from project_run.apps.users.serializers import ShortUserSerailizer, UserDetailSerializser
 from project_run.apps.common.filters import CommonAppPagination
 
 
@@ -29,14 +29,15 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
     search_fields = ["first_name", "last_name"]
     ordering_fields = ["date_joined"]
     pagination_class = CommonAppPagination
-    serializer_class = GetUserSerializer
+    serializer_class = ShortUserSerailizer
 
 
 
     def get_serializer_class(self):
         if self.action == "retrieve":
-            return GetUserItemsSerializer
+            return UserDetailSerializser
         return super().get_serializer_class()
+
     def get_user_param_type(self) -> str | None:
         param_user_type = self.request.query_params.get("type", None)
 

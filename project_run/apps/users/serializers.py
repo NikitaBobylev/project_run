@@ -10,6 +10,7 @@ from project_run.apps.collectibleitems.serializers import (
 )
 
 from project_run.apps.collectibleitems.models import CollectibleItems
+from project_run.apps.subscriptions.models import Subscriptions
 
 base_user_fields = [
     "id",
@@ -26,7 +27,7 @@ class GetRunsUserSerializer(ModelSerializer):
         model = User
         fields = base_user_fields.copy()
 
-class GetUserSerializer(ModelSerializer):
+class ShortUserSerailizer(ModelSerializer):
     type = SerializerMethodField()
     runs_finished = IntegerField()
 
@@ -40,8 +41,9 @@ class GetUserSerializer(ModelSerializer):
         model = User
         fields = base_user_fields + get_user_fieds
 
-class GetUserItemsSerializer(GetUserSerializer):
+class UserDetailSerializser(ShortUserSerailizer):
     items = SerializerMethodField(read_only=True)
+    coach_athlete = SerializerMethodField(read_only=True)
 
     def get_items(self, obj):
         items = CollectibleItems.objects.prefetch_related("users").filter(
@@ -49,6 +51,20 @@ class GetUserItemsSerializer(GetUserSerializer):
         )
         return CollectibleItemsSerializerOutput(items, many=True).data
 
+    def get_coach_athlete(self, obj):
+        if obj.type == "coach": 
+            return Subscriptions.objects.filter(
+                coach_id=obj.id
+            ).values_list("athlete_id", flat=True)
+
+        return Subscriptions.objects.get(athlete_id=obj.id).athlete_id
+
+    def to_representation(self, instance):
+        revers_dict = {"athlete": "coach", "coach": "athletes"}
+        data =  super().to_representation(instance).copy()
+        data[revers_dict[instance.type]] = data.pop("coach_athlete")
+        return data
+
     class Meta:
         model = User
-        fields = base_user_fields + get_user_fieds + ["items"]
+        fields = base_user_fields + get_user_fieds + ["items", "coach_athlete"]
