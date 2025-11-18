@@ -55,11 +55,7 @@ def calculate_position(sender: type[Positions], instance: Positions, **kwargs):
             (prev_position.latitude, prev_position.longitude),
             (instance.latitude, instance.longitude),
         )
-        full_run_disntace: Decimal = Decimal(disntace_geo_last.kilometers)
-
-        for position in all_positions:
-            full_run_disntace += Decimal(position.distance)
-
+        full_run_disntace: Decimal = Decimal(disntace_geo_last.kilometers) + Decimal(prev_position.distance)
         instance.distance = float(round(full_run_disntace, 2))
         time_spend_seconds = (instance.created_at - prev_position.created_at).seconds
         instance.speed = float(round(disntace_geo_last.meters / time_spend_seconds, 2))
