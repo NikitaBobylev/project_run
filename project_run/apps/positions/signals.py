@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db.models import Q
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
@@ -48,23 +49,17 @@ def calculate_position(sender: type[Positions], instance: Positions, **kwargs):
     ).order_by("created_at")
 
     prev_position = all_positions.last()
-    first_position = all_positions.first()
 
     if prev_position:
-        disntace_geo_first = geodesic(
-            (first_position.latitude, first_position.longitude),
-            (instance.latitude, instance.longitude),
-        )
-
         disntace_geo_last = geodesic(
             (prev_position.latitude, prev_position.longitude),
             (instance.latitude, instance.longitude),
         )
-        instance.distance = float(
-            round(
-                disntace_geo_first.kilometers,
-                2,
-            )
-        )
+        full_run_disntace: Decimal = Decimal(disntace_geo_last.kilometers)
+
+        for position in all_positions:
+            full_run_disntace += Decimal(position.distance)
+
+        instance.distance = float(round(full_run_disntace, 2))
         time_spend_seconds = (instance.created_at - prev_position.created_at).seconds
         instance.speed = float(round(disntace_geo_last.meters / time_spend_seconds, 2))
