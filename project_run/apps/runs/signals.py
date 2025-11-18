@@ -38,6 +38,15 @@ def create_challege(sender, instance, created, **kwargs):
             challenge.save()
 
 
+        if all_disntace >= 2 and instance.speed / 60 >= 10:
+            challenge = Challenges(
+                full_name=f"2 километра за 10 минут!",
+                athlete=instance.athlete,
+            )
+            challenge.save()
+
+
+
 def __calculate_distance(instance: Runs, positions) -> Decimal:
     res = Decimal(0)
     for position in range(1, len(positions)):
@@ -67,6 +76,6 @@ def calculate_distance(sender, instance, *args, **kwargs):
         positions: QuerySet = instance.positions.order_by("created_at").values()
 
         instance.distance = __calculate_distance(instance, positions)
-        
+
         instance.run_time_seconds = __calculate_run_time_seconds(positions=positions)
         instance.speed = float(round(positions.aggregate(Avg("speed"))['speed__avg'], 2))
