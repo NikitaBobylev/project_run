@@ -1,4 +1,9 @@
-from rest_framework.serializers import ModelSerializer, DecimalField, DateTimeField
+from rest_framework.serializers import (
+    ModelSerializer,
+    DecimalField,
+    DateTimeField,
+    FloatField,
+)
 from rest_framework.exceptions import ValidationError
 
 from project_run.apps.positions.models import (
@@ -16,6 +21,8 @@ class PositionSerilizer(ModelSerializer):
         format="%Y-%m-%dT%H:%M:%S.%f",
         source="created_at",
     )
+    speed = FloatField(read_only=True)
+    distance = FloatField(read_only=True)
 
     def validate_latitude(self, value):
         validate_latitude_db(value=value)
@@ -35,13 +42,21 @@ class PositionSerilizer(ModelSerializer):
     def to_internal_value(self, data):
         # Преобразуем данные перед валидацией
         internal_value = super().to_internal_value(data)
-        
+
         # Перемещаем date_time в created_at
-        if 'date_time' in internal_value:
-            internal_value['created_at'] = internal_value.pop('date_time')
-            
+        if "date_time" in internal_value:
+            internal_value["created_at"] = internal_value.pop("date_time")
+
         return internal_value
 
     class Meta:
         model = Positions
-        fields = ["longitude", "run", "latitude", "id", "date_time"]
+        fields = [
+            "longitude",
+            "run",
+            "latitude",
+            "id",
+            "date_time",
+            "speed",
+            "distance",
+        ]

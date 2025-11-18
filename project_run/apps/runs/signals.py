@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
-from django.db.models import Q, QuerySet, Sum
+from django.db.models import Q, QuerySet, Sum, Avg
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
@@ -55,16 +55,18 @@ def __calculate_distance(instance: Runs, positions) -> Decimal:
 
 def __calculate_run_time_seconds(positions):
     res = 0
-    if len(positions) > 0: 
+    if len(positions) > 0:
         res = (positions.last()["created_at"] - positions.first()["created_at"]).seconds
 
     return res
 
+
 @receiver(pre_save, sender=Runs)
 def calculate_distance(sender, instance, *args, **kwargs):
     if instance.status == RunsStatusEnums.finished.value:
-        positions = instance.positions.order_by("created_at").values()
+        positions: QuerySet = instance.positions.order_by("created_at").values()
 
         instance.distance = __calculate_distance(instance, positions)
-
+        
         instance.run_time_seconds = __calculate_run_time_seconds(positions=positions)
+        instance.speed = float(round(positions.aggregate(Avg("speed"))['speed__avg'], 2))

@@ -40,3 +40,5 @@ class PositionsAbstract(models.Model):
 class Positions(PositionsAbstract):
     run = models.ForeignKey(Runs, on_delete=models.CASCADE, related_name="positions")
     created_at = models.DateTimeField()
+    distance = models.FloatField(null=False, blank=False, default=0)
+    speed = models.FloatField(null=False, blank=False, default=0)

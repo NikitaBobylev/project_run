@@ -26,3 +26,7 @@ class Runs(CreatedAtTimeStampedModel):
     run_time_seconds = models.IntegerField(
         default=None, blank=True, null=True,
     )
+
+    speed = models.FloatField(
+        default=0, blank=False, null=False,
+    )
