@@ -10,7 +10,6 @@ from geopy.distance import geodesic
 
 from project_run.apps.runs.models import Runs, RunsStatusEnums
 from project_run.apps.challenges.models import Challenges
-from project_run.apps.positions.models import Positions
 
 
 @receiver(post_save, sender=Runs)
@@ -48,18 +47,18 @@ def create_challege(sender, instance, created, **kwargs):
 
 
 def __calculate_distance(instance: Runs, positions) -> Decimal:
-    res = Decimal(0)
-    for position in range(1, len(positions)):
-        first = positions[position - 1]
-        last = positions[position]
-        res += Decimal(
-            geodesic(
-                (first["latitude"], first["longitude"]),
-                (last["latitude"], last["longitude"]),
-            ).kilometers
-        )
+    # res = Decimal(0)
+    # for position in range(1, len(positions)):
+    #     first = positions[position - 1]
+    #     last = positions[position]
+    #     res += Decimal(
+    #         geodesic(
+    #             (first["latitude"], first["longitude"]),
+    #             (last["latitude"], last["longitude"]),
+    #         ).kilometers
+    #     )
 
-    return res
+    return Decimal(positions.last()["distance"])
 
 
 def __calculate_run_time_seconds(positions):
