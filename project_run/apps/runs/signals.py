@@ -38,7 +38,7 @@ def create_challege(sender, instance, created, **kwargs):
             challenge.save()
 
 
-        if all_disntace >= 2 and instance.speed / 60 >= 10:
+        if all_disntace >= 2 and instance.run_time_seconds / 60 >= 10:
             challenge = Challenges(
                 full_name=f"2 километра за 10 минут!",
                 athlete=instance.athlete,
