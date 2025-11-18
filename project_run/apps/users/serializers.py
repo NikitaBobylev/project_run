@@ -57,7 +57,7 @@ class UserDetailSerializser(ShortUserSerailizer):
                 coach_id=obj.id
             ).values_list("athlete_id", flat=True)
 
-        return Subscriptions.objects.get(athlete_id=obj.id).athlete_id
+        return Subscriptions.objects.filter(athlete_id=obj.id).first()
 
     def to_representation(self, instance):
         revers_dict = {"athlete": "coach", "coach": "athletes"}
