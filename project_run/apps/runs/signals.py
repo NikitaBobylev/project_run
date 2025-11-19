@@ -43,7 +43,11 @@ def create_challege(sender, instance, created, **kwargs):
 
 
 def __calculate_distance(instance: Runs, positions) -> Decimal:
-    return Decimal(positions.last()["distance"])
+    res = Decimal(0)
+    pos = positions.last()
+    if pos:
+        res += Decimal(positions.last()["distance"])
+    return res
 
 
 def __calculate_run_time_seconds(positions):
@@ -62,6 +66,12 @@ def calculate_distance(sender, instance, *args, **kwargs):
         instance.distance = __calculate_distance(instance, positions)
 
         instance.run_time_seconds = __calculate_run_time_seconds(positions=positions)
+        speed = 0
+        positions_speed = positions.aggregate(Avg("speed"))["speed__avg"]
+
+        if positions_speed is not None:
+            speed += positions_speed
+
         instance.speed = float(
-            round(positions.aggregate(Avg("speed"))["speed__avg"], 2)
+            round(speed, 2)
         )
