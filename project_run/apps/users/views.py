@@ -10,6 +10,7 @@ from django.db.models import (
     When,
     Count,
     Prefetch,
+    Avg
 )
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -67,6 +68,7 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
                     ),
                 )
             )
+            .prefetch_related("atheltes_sub")
             .annotate(
                 type=Case(
                     When(
@@ -86,7 +88,8 @@ class ReadOnlyUsersViewSet(ReadOnlyModelViewSet):
             .annotate(
                 runs_finished=Count(
                     "runs", filter=Q(runs__status=RunsStatusEnums.finished.value)
-                )
+                ),
+                rating=Avg("atheltes_sub__rating")
             )
         )
 

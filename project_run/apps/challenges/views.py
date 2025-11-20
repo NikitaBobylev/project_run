@@ -38,7 +38,7 @@ class ChallengesApiView(APIView):
 
 class ChallengeSummaru(mixins.ListModelMixin, viewsets.GenericViewSet):
     model = Challenges
-
+    
     def get_challenges_summary(self):
         challenges_data = Challenges.objects.select_related("athlete").values(
             "full_name",

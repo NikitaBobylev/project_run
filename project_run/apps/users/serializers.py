@@ -19,7 +19,7 @@ base_user_fields = [
     "first_name",
 ]
 
-get_user_fieds = ["date_joined", "type", "runs_finished" ]
+get_user_fieds = ["date_joined", "type", "runs_finished", "rating"]
 
 
 class GetRunsUserSerializer(ModelSerializer):
@@ -27,9 +27,14 @@ class GetRunsUserSerializer(ModelSerializer):
         model = User
         fields = base_user_fields.copy()
 
+
 class ShortUserSerailizer(ModelSerializer):
     type = SerializerMethodField()
     runs_finished = IntegerField()
+    rating = SerializerMethodField()
+
+    def get_rating(self, obj):
+        return obj.rating
 
     def get_type(self, obj):
         return obj.type
@@ -40,6 +45,7 @@ class ShortUserSerailizer(ModelSerializer):
     class Meta:
         model = User
         fields = base_user_fields + get_user_fieds
+
 
 class UserDetailSerializser(ShortUserSerailizer):
     items = SerializerMethodField(read_only=True)
@@ -52,10 +58,10 @@ class UserDetailSerializser(ShortUserSerailizer):
         return CollectibleItemsSerializerOutput(items, many=True).data
 
     def get_coach_athlete(self, obj):
-        if obj.type == "coach": 
-            return Subscriptions.objects.filter(
-                coach_id=obj.id
-            ).values_list("athlete_id", flat=True)
+        if obj.type == "coach":
+            return Subscriptions.objects.filter(coach_id=obj.id).values_list(
+                "athlete_id", flat=True
+            )
         coach = Subscriptions.objects.filter(athlete_id=obj.id).first()
         if coach is None:
             return None
@@ -63,7 +69,7 @@ class UserDetailSerializser(ShortUserSerailizer):
 
     def to_representation(self, instance):
         revers_dict = {"athlete": "coach", "coach": "athletes"}
-        data =  super().to_representation(instance).copy()
+        data = super().to_representation(instance).copy()
         data[revers_dict[instance.type]] = data.pop("coach_athlete")
         return data
 
