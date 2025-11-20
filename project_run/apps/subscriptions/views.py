@@ -79,15 +79,19 @@ class AnalitycsApiView(views.APIView):
     def get(
         self, request: request.Request, coach: int, *args, **kwargs
     ) -> response.Response:
-        coach_obj = User.objects.prefetch_related("atheltes_sub").filter(id=coach)
-        if coach_obj.first() is None:
+        print("COACH REQUST --------------------")
+        coach_obj = User.objects.prefetch_related("atheltes_sub").filter(id=coach).first()
+        if coach_obj is None:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
-        validate_coach(coach_obj.first())
+        validate_coach(coach_obj)
+        print("-----------------------------")
+        print()
+        print("RUNS REQUSTS ------------------------------")
         runs = Runs.objects.select_related("athlete").filter(
             Q(status=RunsStatusEnums.finished.value) & 
-            Q(athlete_id__in=coach_obj.first().atheltes_sub.all().values_list("athlete_id", flat=True))
+            Q(athlete_id__in=coach_obj.atheltes_sub.all().values_list("athlete_id", flat=True))
         )
-
+        print()
         res = {
             'longest_run_user': None,
             'longest_run_value': None, 
@@ -96,26 +100,27 @@ class AnalitycsApiView(views.APIView):
             'speed_avg_user': None,
             'speed_avg_value': None
         }
-
+        print("distance_req REQUST --------------")
         distance_req = runs.order_by("-distance").first()
-
+        print()
         if distance_req:
             res["longest_run_user"] = distance_req.athlete_id
             res["longest_run_value"] = distance_req.distance
 
-
+        print("run_user_req requst -----------")
         run_user_req = runs.values("athlete_id").annotate(
             total=Sum("distance"),
             avg_speed=Avg("speed")
         )
+        print()
 
-
-
+        print('total_run_user_req')
         total_run_user_req = run_user_req.order_by("-total").first()
         if total_run_user_req:
             res["total_run_user"] = total_run_user_req["athlete_id"]
             res["total_run_value"] = total_run_user_req["total"]
-
+        print()
+        print("avg_speed_run_user_req")
         avg_speed_run_user_req = run_user_req.order_by("-avg_speed").first() 
 
         if avg_speed_run_user_req:
