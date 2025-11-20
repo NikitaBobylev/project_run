@@ -25,3 +25,11 @@ class RatingSubscriptionsSerializer(serializers.Serializer):
         min_rating_validator(val)
         return val
 
+
+class AnalitycsSerializer(serializers.Serializer):
+    longest_run_user = serializers.IntegerField()
+    longest_run_value = serializers.IntegerField()
+    total_run_user = serializers.IntegerField()
+    total_run_value = serializers.IntegerField()
+    speed_avg_user = serializers.IntegerField()
+    speed_avg_value = serializers.IntegerField()

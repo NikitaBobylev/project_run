@@ -76,3 +76,6 @@ class UserDetailSerializser(ShortUserSerailizer):
     class Meta:
         model = User
         fields = base_user_fields + get_user_fieds + ["items", "coach_athlete"]
+
+
+
